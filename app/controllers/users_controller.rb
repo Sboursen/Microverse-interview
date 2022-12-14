@@ -3,7 +3,8 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.all
+    @status = params[:status]
+    @users = Kaminari.paginate_array(users_by_status).page(params[:page]).per(10)
   end
 
   # GET /users/1 or /users/1.json
@@ -66,5 +67,10 @@ class UsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:first_name, :last_name, :status, :email)
+    end
+
+    def users_by_status
+      return User.all unless ["Active", "Inactive"].include?(params[:status])
+      User.where(:status => params[:status])
     end
 end

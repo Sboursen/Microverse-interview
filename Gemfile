@@ -44,3 +44,5 @@ gem "redis", "~> 4.8"
 gem "foreman", "~> 0.87.2"
 
 gem "rest-client", "~> 2.1"
+
+gem "kaminari", "~> 1.2"
