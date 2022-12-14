@@ -38,3 +38,9 @@ group :test do
 end
 
 gem "ruby-lsp", "~> 0.0.4", :group => :development
+
+gem "redis", "~> 4.8"
+
+gem "foreman", "~> 0.87.2"
+
+gem "rest-client", "~> 2.1"

@@ -1,3 +1,6 @@
 Rails.application.routes.draw do
-  resources :users, only: [:index, :show]
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
+  resources :users
 end
