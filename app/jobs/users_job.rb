@@ -5,15 +5,14 @@ class UsersJob
   include Sidekiq::Job
 
   def perform(**parameters)
-    @parameters = parameters
-    url = URI("http://microverse-api-app.herokuapp.com/users")
+    url = URI("http://microverse-api-app.herokuapp.com/users#{params(parameters)}")
 
     http = Net::HTTP.new(url.host, url.port)
 
     request = Net::HTTP::Get.new(url)
     request["Authorization"] = ENV['USERS_API_KEY']
     res = http.request(request)
-    
+
     if res.kind_of? Net::HTTPSuccess
       users_params = JSON.parse(res.body)
     else
@@ -23,13 +22,13 @@ class UsersJob
   end
 
   private
-  def params
-    return '' if !@parameters.include?(:offset) && !@parameters.include?(:limit)
+  def params(parameters)
+    return '' if !parameters.include?(:offset) && !parameters.include?(:limit)
 
     if parameters.include?(:offset) ^ parameters.include?(:limit)
-      return "?#{"offset=#{@parameters[:offset]}" if @parameters.include?(:offset)}#{"limit=#{@parameters[:limit]}" if @parameters.include?(:limit)}"
+      return "?#{"offset=#{parameters[:offset]}" if parameters.include?(:offset)}#{"limit=#{parameters[:limit]}" if parameters.include?(:limit)}"
     end
 
-    "?#{"offset=#{@parameters[:offset]}" if @parameters.include?(:offset)}&#{"limit=#{@parameters[:limit]}" if @parameters.include?(:limit)}"
+    "?#{"offset=#{parameters[:offset]}" if parameters.include?(:offset)}&#{"limit=#{parameters[:limit]}" if parameters.include?(:limit)}"
   end
 end
