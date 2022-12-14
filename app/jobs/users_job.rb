@@ -19,6 +19,7 @@ class UsersJob
       users_params = []
     end
     UsersCreator.new(users_params).call
+    ActiveRecord::Base.connection.execute("SELECT setval('users_id_seq', COALESCE((SELECT MAX(id)+1 FROM users), 1), false)")
   end
 
   private
