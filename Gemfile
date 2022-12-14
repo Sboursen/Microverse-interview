@@ -18,6 +18,8 @@ gem 'dotenv'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+
+  gem 'rspec-rails', '~> 5.0.0'
 end
 
 group :development do
@@ -29,9 +31,10 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3.8'
   gem 'factory_bot'
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
 end
+
+gem "ruby-lsp", "~> 0.0.4", :group => :development
