@@ -3,53 +3,67 @@
 </p>
 
 <h1>Users</h1>
+
 <br>
 
 <%= link_to 'New User' , new_user_path %>
 
-  <br>
+  <select name="status_name" id="status_id" onchange="updateTable()">
+    <option value="All" <%="selected" unless ["Active", "Inactive"].include?(@status) %> >All</option>
+    <option value="Active" <%="selected" if @status=="Active" %> >Active</option>
+    <option value="Inactive" <%="selected" if @status=="Inactive" %> >Inactive</option>
+    </select>
 
-  <table>
-    <thead>
-      <tr>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Status</th>
-        <th>Email</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
+    <br>
 
-    <tbody>
-      <% @users.each do |user| %>
+    <table>
+      <thead>
         <tr>
-          <td>
-            <%= user.first_name %>
-          </td>
-          <td>
-            <%= user.last_name %>
-          </td>
-          <td>
-            <%= user.status %>
-          </td>
-          <td>
-            <%= user.email %>
-          </td>
-          <td>
-            <%= link_to 'Show' , user %>
-          </td>
-          <td>
-            <%= link_to 'Edit' , edit_user_path(user) %>
-          </td>
-          <td>
-            <%= link_to 'Destroy' , user, method: :delete, data: { confirm: 'Are you sure?' } %>
-          </td>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Status</th>
+          <th>Email</th>
+          <th colspan="3"></th>
         </tr>
-        <% end %>
-    </tbody>
-  </table>
+      </thead>
 
-  <br>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td>
+              <%= user.first_name %>
+            </td>
+            <td>
+              <%= user.last_name %>
+            </td>
+            <td>
+              <%= user.status %>
+            </td>
+            <td>
+              <%= user.email %>
+            </td>
+            <td>
+              <%= link_to 'Show' , user %>
+            </td>
+            <td>
+              <%= link_to 'Edit' , edit_user_path(user) %>
+            </td>
+            <td>
+              <%= link_to 'Destroy' , user, method: :delete, data: { confirm: 'Are you sure?' } %>
+            </td>
+          </tr>
+          <% end %>
+      </tbody>
+    </table>
+
+    <br>
 
 
-  <%= paginate @users %>
+    <%= paginate @users %>
+      <script type="text/javascript">
+        function updateTable() {
+          select = document.getElementById('status_id');
+
+          window.location.href = `/users?page=1&status=${select.value}`
+        }
+      </script>
