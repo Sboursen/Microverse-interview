@@ -4,8 +4,8 @@ require File.join(Rails.root, 'app/services', 'users_service.rb')
 class UsersJob
   include Sidekiq::Job
 
-  def perform(**parameters)
-    url = URI("http://microverse-api-app.herokuapp.com/users#{params(parameters)}")
+  def perform
+    url = URI("http://microverse-api-app.herokuapp.com/users?limit=100")
 
     http = Net::HTTP.new(url.host, url.port)
 
@@ -20,16 +20,5 @@ class UsersJob
     end
     UsersCreator.new(users_params).call
     ActiveRecord::Base.connection.execute("SELECT setval('users_id_seq', COALESCE((SELECT MAX(id)+1 FROM users), 1), false)")
-  end
-
-  private
-  def params(parameters)
-    return '' if !parameters.include?(:offset) && !parameters.include?(:limit)
-
-    if parameters.include?(:offset) ^ parameters.include?(:limit)
-      return "?#{"offset=#{parameters[:offset]}" if parameters.include?(:offset)}#{"limit=#{parameters[:limit]}" if parameters.include?(:limit)}"
-    end
-
-    "?#{"offset=#{parameters[:offset]}" if parameters.include?(:offset)}&#{"limit=#{parameters[:limit]}" if parameters.include?(:limit)}"
   end
 end
