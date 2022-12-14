@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.all
+    @users = Kaminari.paginate_array(User.all).page(params[:page]).per(10)
   end
 
   # GET /users/1 or /users/1.json
